@@ -29,8 +29,14 @@ options:
                         BeatifulSoup (default: False)
 ```
 
+How create Docker container
 
-*** Run Hacker proxy ***
+```
+docker build -t hacker-proxy -f Dockerfile .
+```
+
+
+Run Hacker proxy
 
 ```
 docker run -it --rm -p 8232:8232 hacker-proxy
