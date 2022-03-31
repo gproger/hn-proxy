@@ -1,9 +1,9 @@
 class ProxyConfig:
     """Configuration for Hacker News proxy"""
     #: local HTTP proxy listen port
-    port : int
+    port: int
     #: word length to patch
-    word_len : int
+    word_len: int
     #: str what need to add to matched word
     word_app: str
     #: target url to proxify

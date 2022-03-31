@@ -5,7 +5,6 @@ import consts
 from proxyserver import ProxyServer
 
 
-
 def get_args_parser() -> ArgumentParser:
     """Build argument parser."""
     parser = ArgumentParser(description="Hacker News proxy")
@@ -70,8 +69,6 @@ def get_args_parser() -> ArgumentParser:
     return parser
 
 
-
-
 def main():
     """Run Hacker News server."""
     parser = get_args_parser()
@@ -81,6 +78,7 @@ def main():
         args.target_url += '/'
     pr = ProxyServer(args)
     pr.run()
+
 
 if __name__ == "__main__":
     main()
