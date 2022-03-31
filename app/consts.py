@@ -12,7 +12,7 @@ WORD_APP = "™"
 #: Default target proxyfied url
 TARGET_URL = "https://news.ycombinator.com"
 #: Default source proxy ipv4 addr
-SOURCE_IPV4 = 'localhost'
+SOURCE_IPV4 = '0.0.0.0'
 #: Default patcher for html based on BeatifulSoup or regex
 REG_PATCHER = False
 

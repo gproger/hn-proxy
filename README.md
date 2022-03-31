@@ -6,6 +6,7 @@ https://github.com/ivelum/job/blob/master/challenges/python.md
 
 
 
+
 ```
 usage: app.py [-h] [-l [WORD_LEN]] [-t [WORD_APP]] [-u [TARGET_URL]]
               [-p [PORT]] [-a [SOURCE_IPV4]] [--regex | --no-regex]
@@ -29,4 +30,8 @@ options:
 ```
 
 
-*** Run proxy ***
+*** Run Hacker proxy ***
+
+```
+docker run -it --rm -p 8232:8232 hacker-proxy
+```
