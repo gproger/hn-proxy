@@ -14,7 +14,7 @@ TARGET_URL = "https://news.ycombinator.com"
 #: Default source proxy ipv4 addr
 SOURCE_IPV4 = 'localhost'
 #: Default patcher for html based on BeatifulSoup or regex
-BS4_PATCHER = True
+REG_PATCHER = False
 
 
 # =============================

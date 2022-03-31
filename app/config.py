@@ -11,4 +11,4 @@ class ProxyConfig:
     #: source ipv4 addr for incoming connections
     source_ipv4: str
     #: use BeatifulSoup patcher or regex
-    bs4_patcher: bool
+    regex_patcher: bool

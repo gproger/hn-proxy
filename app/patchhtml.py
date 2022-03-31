@@ -84,7 +84,7 @@ def patch_html_bs4(res: str, config: ProxyConfig) -> str:
 
 def patch_html(res: bytes, config: ProxyConfig) -> bytes:
     """ HTML patcher instance """
-    if not config.bs4_patcher:
+    if config.regex_patcher:
         return patch_html_regex(res, config.word_len,
                                 config.word_app, config.target_url)
     else:

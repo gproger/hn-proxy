@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from argparse import BooleanOptionalAction
 
 import consts
 from proxyserver import ProxyServer
@@ -59,14 +60,12 @@ def get_args_parser() -> ArgumentParser:
         dest="source_ipv4",
     )
     parser.add_argument(
-        "-b",
-        "--bs4",
-        nargs="?",
+        "--regex",
         type=bool,
-        const=consts.BS4_PATCHER,
-        default=consts.BS4_PATCHER,
-        help="Use BeatifulHtml patcher or regex",
-        dest="bs4_patcher",
+        default=consts.REG_PATCHER,
+        action=BooleanOptionalAction,
+        help="Use RegEx patcher instead default based on BeatifulSoup",
+        dest="regex_patcher",
     )
     return parser
 
