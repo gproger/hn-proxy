@@ -4,46 +4,41 @@ from urllib.error import HTTPError, URLError
 from functools import partial
 import ssl
 import gzip
-#import time
-from config import ProxyConfig
-from patchhtml import patch_html
+from .config import ProxyConfig
+from .patchhtml import patch_html
 
 
 # for mac OS with not by Brew installation python we need create ssl context
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-
 class ProxyHandler(BaseHTTPRequestHandler):
     """ ProxyHandler for ThreadingHTTPServer instance """
     def __init__(self, config: ProxyConfig, *args, **kwargs):
-        self.config=config
+        self.config = config
         super().__init__(*args, **kwargs)
-
 
     def do_GET(self):
         """ Process HTTP GET request """
-        url=self.path[1:]
+        url = self.path[1:]
         url = self.config.target_url + self.path[1:]
         try:
             result = request.urlopen(url)
         except HTTPError as err:
-            self.send_response(code=int(err.code),message=err.reason)
-            data=''.encode('utf-8')
+            self.send_response(code=int(err.code), message=err.reason)
+            data = ''.encode('utf-8')
         except URLError as err:
-            self.send_response(code=500,message='No internet connection')
-            data=''.encode('utf-8')
+            self.send_response(code=500, message='No internet connection')
+            data = ''.encode('utf-8')
         else:
             self.send_response(result.status)
             data = result.read()
             for att, val in result.getheaders():
                 self.send_header(att, val)
                 if att == 'Content-Type' and 'text/html' in val:
-#                start_time = time.time()
                     data = patch_html(data,
                                       self.config
-                                     )
- #               print("--- %s seconds ---" % (time.time() - start_time))
+                                      )
         finally:
             self.end_headers()
             self.wfile.write(data)
@@ -58,14 +53,14 @@ class ProxyHandler(BaseHTTPRequestHandler):
         result = ''
         data = ''
         try:
-            req = request.Request(url, headers=headers, data=post_data)     
-            result = request.urlopen(req)   
+            req = request.Request(url, headers=headers, data=post_data)
+            result = request.urlopen(req)
         except HTTPError as err:
-            self.send_response(code=int(err.code),message=err.reason)
-            data=''.encode('utf-8')
+            self.send_response(code=int(err.code), message=err.reason)
+            data = ''.encode('utf-8')
         except URLError as err:
-            self.send_response(code=500,message='No internet connection')
-            data=''.encode('utf-8')
+            self.send_response(code=500, message='No internet connection')
+            data = ''.encode('utf-8')
         else:
             self.send_response(result.status)
             data = result.read()
@@ -79,28 +74,28 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 if att == 'Content-Type' and 'text/html' in val:
                     data = patch_html(data,
                                       self.config
-                                     )
+                                      )
                     if gz:
                         data = gzip.compress(data)
- 
+
         finally:
             self.end_headers()
             self.wfile.write(data)
 
 
 class ProxyServer(object):
-    """ Proxy server instance""" 
+    """ Proxy server instance"""
     def __init__(self, config: ProxyConfig) -> None:
-        self.config=config
+        self.config = config
 
     def run(self):
-        """ Main work loop """   
+        """ Main work loop """
         handler = partial(ProxyHandler, self.config)
 
-        httpd = ThreadingHTTPServer((self.config.source_ipv4, 
+        httpd = ThreadingHTTPServer((self.config.source_ipv4,
                                      self.config.port),
-                                     handler
+                                    handler
                                     )
-        print("Now serving at http://{}:{}".format(self.config.source_ipv4, 
-                                                    self.config.port))
+        print("Now serving at http://{}:{}".format(self.config.source_ipv4,
+                                                   self.config.port))
         httpd.serve_forever()

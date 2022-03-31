@@ -1,8 +1,7 @@
 from argparse import ArgumentParser
-from argparse import BooleanOptionalAction
 
-import consts
-from proxyserver import ProxyServer
+from app import consts
+from app.proxyserver import ProxyServer
 
 
 def get_args_parser() -> ArgumentParser:
@@ -58,14 +57,6 @@ def get_args_parser() -> ArgumentParser:
         help="HTTP proxy server binded address",
         dest="source_ipv4",
     )
-    parser.add_argument(
-        "--regex",
-        type=bool,
-        default=consts.REG_PATCHER,
-        action=BooleanOptionalAction,
-        help="Use RegEx patcher instead default based on BeatifulSoup",
-        dest="regex_patcher",
-    )
     return parser
 
 
@@ -73,6 +64,7 @@ def main():
     """Run Hacker News server."""
     parser = get_args_parser()
     args = parser.parse_args()
+    args.regex_patcher = False
     #: add trailing slash
     if args.target_url[-1] != '/':
         args.target_url += '/'

@@ -3,13 +3,22 @@ import html
 from bs4 import BeautifulSoup
 from bs4.element import Tag, NavigableString
 
-from config import ProxyConfig
-from consts import BS_SKIP_TAGS
+from .config import ProxyConfig
+from .consts import BS_SKIP_TAGS
+
+
+def change_rule(matchobj):
+    """ Match function for re.sub """
+    if matchobj.group(0).isalpha():
+        return matchobj.group(0) + "™"
+    else:
+        return matchobj.group(0)
 
 
 def patch_html_regex(res: bytes, word_cnt: int,
                      add_str: str, target_url: str) -> bytes:
     """ HTML patcher based on regex expressions with by char html parsing """
+    """ it will worked currently only for english locale """
     res = res.decode('utf-8')
     result = ''
     st_s = 0
@@ -44,10 +53,10 @@ def patch_html_regex(res: bytes, word_cnt: int,
                 #  (?!<) - test for after world no < symbol - start next
                 #    tag used for correct "parent" matching
 
-                tr = re.sub("(?<!/|-)\\b[a-zA-Z]{"
+                tr = re.sub("(?<!/|-)\\b[\w&]{"
                             + str(word_cnt)
                             + "}\\b(?!<)",
-                            "\g<0>" + add_str,
+                            change_rule,
                             st_res)
                 tr = html.escape(tr[:-1])
                 result = result + tr
@@ -66,11 +75,12 @@ def patch_tag_bs4(tag: Tag, config: ProxyConfig):
         if child.parent != tag:
             continue
 
-        text = re.sub("(?<!/|-)\\b[a-zA-Z]{"
+        text = re.sub("(?<!/|-)\\b[\w&]{"
                       + str(config.word_len)
                       + "}\\b(?!<)",
-                      "\g<0>" + config.word_app,
+                      change_rule,
                       str(child.string))
+        
         child.string.replace_with(NavigableString(text))
 
 
@@ -81,7 +91,7 @@ def patch_html_bs4(res: str, config: ProxyConfig) -> str:
         if tag.name not in BS_SKIP_TAGS:
             patch_tag_bs4(tag, config)
 
-    for tag in html.find_all('a'):
+    for tag in html.find_all('a', href=True):
         st_res = re.sub("{}".format(config.target_url[:-1]) + "[/]{0,1}",
                         "/", str(tag['href']))
         tag['href'] = st_res

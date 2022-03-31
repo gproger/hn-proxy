@@ -25,8 +25,6 @@ options:
                         HTTP proxy server listen port
   -a [SOURCE_IPV4], --addr [SOURCE_IPV4]
                         HTTP proxy server binded address
-  --regex, --no-regex   Use RegEx patcher instead default based on
-                        BeatifulSoup (default: False)
 ```
 
 How create Docker container
