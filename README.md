@@ -8,7 +8,7 @@ https://github.com/ivelum/job/blob/master/challenges/python.md
 
 
 ```
-usage: app.py [-h] [-l [WORD_LEN]] [-t [WORD_APP]] [-u [TARGET_URL]]
+usage: proxy.py [-h] [-l [WORD_LEN]] [-t [WORD_APP]] [-u [TARGET_URL]]
               [-p [PORT]] [-a [SOURCE_IPV4]] [--regex | --no-regex]
 
 Hacker News proxy
