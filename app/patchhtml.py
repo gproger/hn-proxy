@@ -50,12 +50,15 @@ def patch_html_regex(res: bytes, word_cnt: int,
                 #  this symbols may use in link or - word annotations
                 #  \\b[a-zA-Z]{6}\\b - start word (\\b) word with
                 #    only 6 symbols and (\\b) end world
-                #  (?!<) - test for after world no < symbol - start next
+                #  (?!" + add_str + ") - test for after world no
+                #    added symbol at end with required lentgth already
                 #    tag used for correct "parent" matching
 
                 tr = re.sub("(?<!/|-)\\b[\w&]{"
                             + str(word_cnt)
-                            + "}\\b(?!<)",
+                            + "}\\b(?!"
+                            + add_str
+                            + ")",
                             change_rule,
                             st_res)
                 tr = html.escape(tr[:-1])
@@ -77,10 +80,11 @@ def patch_tag_bs4(tag: Tag, config: ProxyConfig):
 
         text = re.sub("(?<!/|-)\\b[\w&]{"
                       + str(config.word_len)
-                      + "}\\b(?!<)",
+                      + "}\\b(?!"
+                      + config.word_app
+                      + ")",
                       change_rule,
                       str(child.string))
-        
         child.string.replace_with(NavigableString(text))
 
 

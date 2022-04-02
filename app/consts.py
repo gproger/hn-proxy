@@ -23,3 +23,15 @@ REG_PATCHER = False
 
 #: Patcher skipped tags
 BS_SKIP_TAGS = {'code', 'script', 'meta', 'style'}
+
+
+# =========================================
+# Forbidden for transfer by proxy HTTP headers
+# =========================================
+
+#: see https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name
+FORBIDDEN_HTTP_HEADER_NAME = [
+    "accept-encoding",
+    "keep-alive",
+    "transfer-encoding",
+    ]

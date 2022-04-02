@@ -4,6 +4,7 @@ from urllib.error import HTTPError, URLError
 from functools import partial
 import ssl
 import gzip
+from .consts import FORBIDDEN_HTTP_HEADER_NAME
 from .config import ProxyConfig
 from .patchhtml import patch_html
 
@@ -34,7 +35,8 @@ class ProxyHandler(BaseHTTPRequestHandler):
             self.send_response(result.status)
             data = result.read()
             for att, val in result.getheaders():
-                self.send_header(att, val)
+                if att.lower() not in FORBIDDEN_HTTP_HEADER_NAME:
+                    self.send_header(att, val)
                 if att == 'Content-Type' and 'text/html' in val:
                     data = patch_html(data,
                                       self.config
